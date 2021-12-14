@@ -213,12 +213,26 @@ extension CollectionViewController: UICollectionViewDelegate, UICollectionViewDa
         }
     }
     
-//    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        collectionView.deselectItem(at: indexPath, animated: true)
-//        print("My name is \(characters[indexPath.row].name), i am on \(indexPath.row)")
-//    }
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.performSegue(withIdentifier: "CharacterInfoSegue", sender: nil)
+    }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "CharacterInfoSegue":
+            prepareCharactersInfo(segue)
+        default:
+            break
+        }
+    }
     
-
+    private func prepareCharactersInfo(_ segue: UIStoryboardSegue) {
+        if let destinationController = segue.destination as? CharacterInfoViewController,
+           let indexPath = collectionView.indexPathsForSelectedItems {
+            destinationController.character = characters[indexPath[0].row]
+            print("prepareCharactersInfo data passed")
+        }
+    }
 }
+
 

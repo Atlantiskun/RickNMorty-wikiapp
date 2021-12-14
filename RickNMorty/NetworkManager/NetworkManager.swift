@@ -46,7 +46,6 @@ struct NetworkManager {
 
     func fetchData(nextPage page: String, complitionHandler: @escaping ([Characters]) -> Void) {
         let urlString = "https://rickandmortyapi.com/api/character/\(page)"
-//        let urlString = "https://rickandmortyapi.com/api/character/1,2,35,38,62,92,127,144,158,175,179,181,239,249,271,338,394,395,435"
         guard let url = URL(string: urlString) else {
             return
         }
@@ -72,6 +71,7 @@ struct NetworkManager {
         var characters: [Characters] = []
         
         do {
+            print(String(data: data, encoding: .utf8))
             let charactersData = try decoder.decode(CharactersData.self, from: data)
             for person in 0..<charactersData.results.count{
                 guard let character = Characters(charactersData: charactersData, andIndex: person) else {

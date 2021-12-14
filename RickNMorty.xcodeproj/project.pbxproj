@@ -16,6 +16,7 @@
 		0A26C5C2275DB15E007358AE /* SearchBarCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A26C5C1275DB15E007358AE /* SearchBarCollectionReusableView.swift */; };
 		0A26C5CA27605ED0007358AE /* MyFavouritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A26C5C927605ED0007358AE /* MyFavouritesViewController.swift */; };
 		0A26C5CC276072A4007358AE /* FavouritesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A26C5CB276072A4007358AE /* FavouritesStorage.swift */; };
+		0A2BA50127685F9D002AF237 /* CharacterInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2BA50027685F9D002AF237 /* CharacterInfoViewController.swift */; };
 		0A55A0122758BDF700DA9DB4 /* TableViewEpisodesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A55A0112758BDF700DA9DB4 /* TableViewEpisodesCell.swift */; };
 		0AAF4A2727547F6200E0433D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAF4A2627547F6200E0433D /* AppDelegate.swift */; };
 		0AAF4A2927547F6200E0433D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAF4A2827547F6200E0433D /* SceneDelegate.swift */; };
@@ -44,6 +45,7 @@
 		0A26C5C1275DB15E007358AE /* SearchBarCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarCollectionReusableView.swift; sourceTree = "<group>"; };
 		0A26C5C927605ED0007358AE /* MyFavouritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFavouritesViewController.swift; sourceTree = "<group>"; };
 		0A26C5CB276072A4007358AE /* FavouritesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesStorage.swift; sourceTree = "<group>"; };
+		0A2BA50027685F9D002AF237 /* CharacterInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInfoViewController.swift; sourceTree = "<group>"; };
 		0A55A0112758BDF700DA9DB4 /* TableViewEpisodesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewEpisodesCell.swift; sourceTree = "<group>"; };
 		0AAF4A2327547F6200E0433D /* RickNMorty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickNMorty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AAF4A2627547F6200E0433D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				0AAF4A4E2754DABC00E0433D /* LoadingReusableView */,
 				0AAF4A512754DB5200E0433D /* CollectionViewItemCell */,
 				0AAF4A3A2754822E00E0433D /* CollectionView.swift */,
+				0A2BA50027685F9D002AF237 /* CharacterInfoViewController.swift */,
 				0A19D2E32757381700772EEB /* EpisodesViewController.swift */,
 				0A25F28E2758B42700CC2725 /* CollectionViewEpisodeCharacters.swift */,
 				0ACB47952759CBC900D31E3C /* SearchViewController.swift */,
@@ -277,6 +280,7 @@
 				0AAF4A4327548D2300E0433D /* CharactersData.swift in Sources */,
 				0A55A0122758BDF700DA9DB4 /* TableViewEpisodesCell.swift in Sources */,
 				0A26C5C2275DB15E007358AE /* SearchBarCollectionReusableView.swift in Sources */,
+				0A2BA50127685F9D002AF237 /* CharacterInfoViewController.swift in Sources */,
 				0AAF4A4C2754D93700E0433D /* LoadingReusableView.swift in Sources */,
 				0AAF4A4527548F7700E0433D /* Characters.swift in Sources */,
 				0AAF4A3E2754847800E0433D /* CollectionViewItemCell.swift in Sources */,
