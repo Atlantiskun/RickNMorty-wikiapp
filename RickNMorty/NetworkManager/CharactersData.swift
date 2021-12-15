@@ -9,10 +9,16 @@ import Foundation
 
 
 struct CharactersData: Decodable {
-    let results: [PartsResult]
+    let results: [CharacterResult]
+    let info: PagesInfo
 }
 
-struct PartsResult: Decodable {
+struct PagesInfo: Decodable {
+    let count: Int
+    let pages: Int
+}
+
+struct CharacterResult: Decodable {
     let id: Int
     let name: String
     let image: String
@@ -27,27 +33,8 @@ struct tempAvgLocation: Decodable {
     let name: String
 }
 
-enum tempAvgGender: String, Decodable {
-    case female = "Female"
-    case male = "Male"
-    case unknown = "unknown"
-}
-
 enum tempAvgStatus: String, Decodable {
     case alive = "Alive"
     case dead = "Dead"
     case unknown = "unknown"
-}
-
-enum tempAvgSpecies: String, Decodable {
-    case alien = "Alien"
-    case human = "Human"
-    case animal = "Animal"
-    
-}
-
-struct CharactersDataShort: Decodable {
-    let id: Int
-    let name: String
-    let image: String
 }

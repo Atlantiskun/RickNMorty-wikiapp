@@ -34,7 +34,7 @@ struct Characters: CharacterProtocol {
         episodes = charactersData.results[index].episode
     }
     
-    init?(charactersDataShort: PartsResult) {
+    init?(charactersDataShort: CharacterResult) {
         name = charactersDataShort.name
         image = charactersDataShort.image
         id = charactersDataShort.id

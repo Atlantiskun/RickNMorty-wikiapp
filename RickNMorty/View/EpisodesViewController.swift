@@ -43,9 +43,9 @@ class EpisodesViewController: UIViewController {
         if !self.isLoading {
             self.isLoading = true
             DispatchQueue.global().async {
-                self.networkManager.getNumberOfPagesAndCount(urlString: self.episodesUrl) { info in
+                self.networkManager.getNumberOfPagesAndCountFrom(url: self.episodesUrl) { info in
                     for page in 1...info!.1 {
-                        self.networkManager.fetchEpisodesData(nextPage: page) { episodesList in
+                        self.networkManager.getEpisodesFrom(page: page) { episodesList in
                             for episode in episodesList {
                                 self.episodes.append(episode)
                             }

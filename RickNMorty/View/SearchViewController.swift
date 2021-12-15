@@ -13,11 +13,9 @@ class SearchViewController: UIViewController {
     @IBOutlet var searchResults: UICollectionView!
     
     let networkManager = NetworkManager()
-    
     var isSearching = false
-    
+    var failureSearch = false
     var filteredCharacters = [Characters]()
-    
     var favouritesStorage: MyFavouritesStorageProtocol = MyFavouritesStorage()
     var saveToStorage: [CharacterProtocol] = [] {
         didSet {
@@ -34,11 +32,9 @@ class SearchViewController: UIViewController {
         
         definesPresentationContext = true
         
-        //Register Item Cell
         let itemCellNib = UINib(nibName: "CollectionViewItemCell", bundle: nil)
         self.searchResults.register(itemCellNib, forCellWithReuseIdentifier: "collectionviewitemcellid")
 
-        //Register Loading Reuseable View
         let loadingReusableNib = UINib(nibName: "LoadingReusableView", bundle: nil)
         searchResults.register(loadingReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "loadingresuableviewid")
         
@@ -51,17 +47,12 @@ class SearchViewController: UIViewController {
         self.saveToStorage = self.favouritesStorage.loadFavourites()
         searchResults.reloadData()
     }
-
-//    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        collectionView.deselectItem(at: indexPath, animated: true)
-//        print("My name is \(filteredCharacters[indexPath.row].name), i am on \(indexPath.row)")
-//    }
     
     @objc func addToFavourites(_ sender: UIButton){
         if sender.currentBackgroundImage == UIImage(systemName: "heart") {
             saveToStorage.append(filteredCharacters[sender.tag])
             sender.setBackgroundImage(UIImage(systemName: "heart.fill"), for: .normal)
-            notifyUser(title: nil, message: "Вы добавили персонажа \(filteredCharacters[sender.tag].name) в избранное", timeToDissapear: 2)
+            notifyUser(title: nil, message: "You added \(filteredCharacters[sender.tag].name) to favourites", timeToDissapear: 2)
         } else {
             for index in 0..<saveToStorage.count {
                 if saveToStorage[index].id == filteredCharacters[sender.tag].id {
@@ -70,11 +61,9 @@ class SearchViewController: UIViewController {
                 }
             }
             sender.setBackgroundImage(UIImage(systemName: "heart"), for: .normal)
-            notifyUser(title: nil, message: "Вы удалили персонажа \(filteredCharacters[sender.tag].name) из избранного", timeToDissapear: 2)
+            notifyUser(title: nil, message: "You removed \(filteredCharacters[sender.tag].name) from favourites", timeToDissapear: 2)
         }
     }
-    
-    
     
     func notifyUser(title: String?, message: String?, timeToDissapear: Int) -> Void {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -121,24 +110,38 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if (kind == UICollectionView.elementKindSectionHeader) {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
             let headerView:UICollectionReusableView =  collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CollectionViewHeader", for: indexPath)
             return headerView
-        }
-        return UICollectionReusableView()
+        
+        case UICollectionView.elementKindSectionFooter:
+            let footerView:UICollectionReusableView =  collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "CollectionViewFooter", for: indexPath)
+            return footerView
+            
+        default:
+            return UICollectionReusableView()
 
         }
+    }
     
-    //MARK: - SEARCH
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if failureSearch {
+            return CGSize(width: view.frame.size.width,
+                          height: 100)
+        }
+        return CGSize(width: view.frame.size.width,
+                      height: 0)
+    }
 
     func resetTimer(searchText: String) {
         timer?.invalidate()
         timer = .scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] timer in
             self!.isSearching = true
             self!.filteredCharacters.removeAll()
-            self!.networkManager.findCharacters(searchName: searchText) { charactersList in
+            self!.networkManager.findCharactersBy(name: searchText) { charactersList in
                 if charactersList.isEmpty {
-                    print("Нечего выводить")
+                    self!.failureSearch = true
                 } else {
                     for character in charactersList {
                         self!.filteredCharacters.append(character)
@@ -157,6 +160,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
             self.filteredCharacters.removeAll()
+            self.failureSearch = false
             self.searchResults.reloadData()
         } else {
             resetTimer(searchText: searchText)

@@ -10,6 +10,7 @@ import Foundation
 
 struct EpisodesData: Decodable {
     let results: [EpisodesResult]
+    let info: PagesInfo
 }
 
 struct EpisodesResult: Decodable {

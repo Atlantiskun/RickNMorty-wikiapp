@@ -61,7 +61,7 @@
             <objects>
                 <viewController storyboardIdentifier="CharacterInfoViewController" id="7Ng-Su-8Lv" customClass="CharacterInfoViewController" customModule="RickNMorty" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="b4l-ue-pce">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Character's Name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PtA-Br-sVS">
@@ -170,7 +170,7 @@
                         <constraints>
                             <constraint firstItem="Rsi-Lk-Pke" firstAttribute="trailing" secondItem="PtA-Br-sVS" secondAttribute="trailing" constant="20" id="BfS-qT-yHx"/>
                             <constraint firstItem="Ioj-ur-fTI" firstAttribute="top" secondItem="PtA-Br-sVS" secondAttribute="bottom" constant="15" id="IAT-m6-mRM"/>
-                            <constraint firstItem="PtA-Br-sVS" firstAttribute="leading" secondItem="Rsi-Lk-Pke" secondAttribute="leading" constant="20" id="Ido-hy-Ery"/>
+                            <constraint firstItem="PtA-Br-sVS" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Rsi-Lk-Pke" secondAttribute="leading" id="Ido-hy-Ery"/>
                             <constraint firstItem="4dH-O0-5cv" firstAttribute="leading" secondItem="Rsi-Lk-Pke" secondAttribute="leading" constant="60" id="QMj-mF-Khw"/>
                             <constraint firstItem="PtA-Br-sVS" firstAttribute="top" secondItem="Rsi-Lk-Pke" secondAttribute="top" constant="30" id="Rtg-rV-TEf"/>
                             <constraint firstItem="4dH-O0-5cv" firstAttribute="top" secondItem="Grb-fF-LXg" secondAttribute="bottom" constant="50" id="aDd-bk-jPW"/>
@@ -307,7 +307,7 @@
             <objects>
                 <viewController id="kC5-wh-hY8" userLabel="Characters from Episode" customClass="CollectionViewEpisodeCharacters" customModule="RickNMorty" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YKR-Fd-Xia">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ZaO-XO-1ax">
@@ -388,7 +388,7 @@
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="L8F-cC-uLB" customClass="CustomLayout" customModule="RickNMorty" customModuleProvider="target">
                                     <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="50" height="50"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="50" height="50"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="number" keyPath="numberOfItemsPerRow">
@@ -422,6 +422,23 @@
                                     <connections>
                                         <outlet property="searchBar" destination="F7f-Dv-zBQ" id="wIy-VB-LpH"/>
                                     </connections>
+                                </collectionReusableView>
+                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="CollectionViewFooter" id="xZ0-2u-AQk">
+                                    <rect key="frame" x="0.0" y="50" width="414" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search result is empty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5aU-4B-8SP">
+                                            <rect key="frame" x="122.5" y="14.5" width="169.5" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstItem="5aU-4B-8SP" firstAttribute="centerY" secondItem="xZ0-2u-AQk" secondAttribute="centerY" id="2uw-ES-5Lc"/>
+                                        <constraint firstItem="5aU-4B-8SP" firstAttribute="centerX" secondItem="xZ0-2u-AQk" secondAttribute="centerX" id="TL4-Er-Qs2"/>
+                                    </constraints>
                                 </collectionReusableView>
                                 <connections>
                                     <outlet property="dataSource" destination="ptb-6z-RPL" id="r8G-zv-tkI"/>

@@ -62,7 +62,7 @@ class CollectionViewEpisodeCharacters: UIViewController {
             self.isLoading = true
             DispatchQueue.global().async {
                 for characterUrl in self.charactersOnEpisodeUrls {
-                    self.networkManager.fetchShortData(urlString: characterUrl) { character in
+                    self.networkManager.getCharacterFrom(urlString: characterUrl) { character in
                         self.characters.append(character)
                     }
                     self.saveToStorage = self.favouritesStorage.loadFavourites()
@@ -85,7 +85,7 @@ class CollectionViewEpisodeCharacters: UIViewController {
         if sender.currentBackgroundImage == UIImage(systemName: "heart") {
             saveToStorage.append(characters[sender.tag])
             sender.setBackgroundImage(UIImage(systemName: "heart.fill"), for: .normal)
-            notifyUser(title: nil, message: "Вы добавили персонажа \(characters[sender.tag].name) в избранное", timeToDissapear: 2)
+            notifyUser(title: nil, message: "You added \(characters[sender.tag].name) to favourites", timeToDissapear: 2)
         } else {
             for index in 0..<saveToStorage.count {
                 if saveToStorage[index].id == characters[sender.tag].id {
@@ -94,11 +94,9 @@ class CollectionViewEpisodeCharacters: UIViewController {
                 }
             }
             sender.setBackgroundImage(UIImage(systemName: "heart"), for: .normal)
-            notifyUser(title: nil, message: "Вы удалили персонажа \(characters[sender.tag].name) из избранного", timeToDissapear: 2)
+            notifyUser(title: nil, message: "You removed \(characters[sender.tag].name) from favourites", timeToDissapear: 2)
         }
     }
-    
-    
     
     func notifyUser(title: String?, message: String?, timeToDissapear: Int) -> Void {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -154,8 +152,6 @@ extension CollectionViewEpisodeCharacters: UICollectionViewDelegate, UICollectio
         if !self.isLoading {
             self.isLoading = true
             DispatchQueue.global().async {
-                // fake background loading task
-//                sleep(2)
                 if self.numberOfCharactersToShow + 20 > self.countOfAllCharacters {
                     self.numberOfCharactersToShow += self.countOfAllCharacters - self.numberOfCharactersToShow
                 } else {
@@ -169,8 +165,6 @@ extension CollectionViewEpisodeCharacters: UICollectionViewDelegate, UICollectio
         }
     }
 
-    
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         if self.isLoading {
             return CGSize.zero
@@ -222,8 +216,6 @@ extension CollectionViewEpisodeCharacters: UICollectionViewDelegate, UICollectio
         if let destinationController = segue.destination as? CharacterInfoViewController,
            let indexPath = collectionViewEpisode.indexPathsForSelectedItems {
             destinationController.character = characters[indexPath[0].row]
-            print(characters[indexPath[0].row])
-            print("prepareCharactersInfo data passed")
         }
     }
 

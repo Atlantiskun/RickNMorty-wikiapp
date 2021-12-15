@@ -12,7 +12,6 @@ class CharacterInfoViewController: UIViewController {
 
     
     @IBOutlet var characterInfoViewController: UIView!
-    
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var characterImage: UIImageView!
     @IBOutlet var statusLabel: UILabel!
@@ -37,7 +36,6 @@ class CharacterInfoViewController: UIViewController {
         Nuke.loadImage(with: URL(string: character!.image), options: options, into: characterImage)
         
         nameLabel.text = character?.name
-//        episodesWithCharacterButton.titleLabel?.text = "View all episodes with \(character!.name)"
         episodesWithCharacterButton.setTitle("Episodes with \(character!.name)", for: .normal)
         statusLabel.text = character?.status
         speciesLabel.text = character?.species
@@ -52,9 +50,9 @@ class CharacterInfoViewController: UIViewController {
         if !self.isLoading {
             self.isLoading = true
             DispatchQueue.global().async {
-                self.networkManager.getNumberOfPagesAndCount(urlString: self.episodesUrl) { info in
+                self.networkManager.getNumberOfPagesAndCountFrom(url: self.episodesUrl) { info in
                     for page in 1...info!.1 {
-                        self.networkManager.fetchEpisodesData(nextPage: page) { episodesList in
+                        self.networkManager.getEpisodesFrom(page: page) { episodesList in
                             for episode in episodesList {
                                 if episode.characters.contains("https://rickandmortyapi.com/api/character/\(self.character!.id)"){
                                     self.episodes.append(episode)

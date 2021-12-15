@@ -12,22 +12,15 @@ class CollectionViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
+    let charactersUrl: String = "https://rickandmortyapi.com/api/character"
     let networkManager = NetworkManager()
-    var characters: [Characters] = []
-    
-    var countOfAllCharacters = 0
-    var countOfAllPages = 0
-    var numberOfCharactersToShow = 0
-    
-    var page = 1
     var loadingView: LoadingReusableView?
-
+    var characters: [Characters] = []
+    var countOfAllCharacters = 0
+    var numberOfCharactersToShow = 0
+    var page = 1
     var isLoading = false
     var nextPage = ""
-
-    var testing = ""
-    let charactersUrl: String = "https://rickandmortyapi.com/api/character"
-    
     var favouritesStorage: MyFavouritesStorageProtocol = MyFavouritesStorage()
     var saveToStorage: [CharacterProtocol] = [] {
         didSet {
@@ -37,20 +30,17 @@ class CollectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
 
-        //Register Item Cell
         let itemCellNib = UINib(nibName: "CollectionViewItemCell", bundle: nil)
         self.collectionView.register(itemCellNib, forCellWithReuseIdentifier: "collectionviewitemcellid")
 
-        //Register Loading Reuseable View
         let loadingReusableNib = UINib(nibName: "LoadingReusableView", bundle: nil)
         collectionView.register(loadingReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "loadingresuableviewid")
         
         loadData()
-        
-       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,7 +54,7 @@ class CollectionViewController: UIViewController {
         if sender.currentBackgroundImage == UIImage(systemName: "heart") {
             saveToStorage.append(characters[sender.tag])
             sender.setBackgroundImage(UIImage(systemName: "heart.fill"), for: .normal)
-            notifyUser(title: nil, message: "Вы добавили персонажа \(characters[sender.tag]) в избранное", timeToDissapear: 2)
+            notifyUser(title: nil, message: "You added \(characters[sender.tag].name) to favourites", timeToDissapear: 2)
         } else {
             for index in 0..<saveToStorage.count {
                 if saveToStorage[index].id == characters[sender.tag].id {
@@ -73,11 +63,9 @@ class CollectionViewController: UIViewController {
                 }
             }
             sender.setBackgroundImage(UIImage(systemName: "heart"), for: .normal)
-            notifyUser(title: nil, message: "Вы удалили персонажа \(characters[sender.tag].name) из избранного", timeToDissapear: 2)
+            notifyUser(title: nil, message: "You removed \(characters[sender.tag].name) from favourites", timeToDissapear: 2)
         }
     }
-    
-    
     
     func notifyUser(title: String?, message: String?, timeToDissapear: Int) -> Void {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -94,11 +82,10 @@ class CollectionViewController: UIViewController {
         if !self.isLoading {
             self.isLoading = true
             DispatchQueue.global().async {
-                self.networkManager.getNumberOfPagesAndCount(urlString: self.charactersUrl) { info in
-                    self.countOfAllPages = info!.1
+                self.networkManager.getNumberOfPagesAndCountFrom(url: self.charactersUrl) { info in
                     self.nextPage = "?page=\(self.page)"
                     self.page += 1
-                    self.networkManager.fetchData(nextPage: self.nextPage) { charactersList in
+                    self.networkManager.getCharactersFrom(page: self.nextPage) { charactersList in
                         for character in charactersList {
                             self.characters.append(character)
                         }
@@ -108,8 +95,7 @@ class CollectionViewController: UIViewController {
                 }
                 self.saveToStorage = self.favouritesStorage.loadFavourites()
                 DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                    
+                    self.collectionView.reloadData()  
                     self.isLoading = false
                 }
             }
@@ -162,7 +148,7 @@ extension CollectionViewController: UICollectionViewDelegate, UICollectionViewDa
             DispatchQueue.global().async {
                 self.nextPage = "?page=\(self.page)"
                 self.page += 1
-                self.networkManager.fetchData(nextPage: self.nextPage) { charactersList in
+                self.networkManager.getCharactersFrom(page: self.nextPage) { charactersList in
                     for character in charactersList {
                         self.characters.append(character)
                     }
@@ -175,14 +161,6 @@ extension CollectionViewController: UICollectionViewDelegate, UICollectionViewDa
                 }
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
-                    for character in self.characters {
-                        print(character.name.count)
-                        if character.name.count >= self.testing.count {
-                            self.testing = character.name
-                        }
-                    }
-                    
-                    print(self.testing)
                     self.isLoading = false
                 }
             }
@@ -242,7 +220,6 @@ extension CollectionViewController: UICollectionViewDelegate, UICollectionViewDa
         if let destinationController = segue.destination as? CharacterInfoViewController,
            let indexPath = collectionView.indexPathsForSelectedItems {
             destinationController.character = characters[indexPath[0].row]
-            print("prepareCharactersInfo data passed")
         }
     }
 }
