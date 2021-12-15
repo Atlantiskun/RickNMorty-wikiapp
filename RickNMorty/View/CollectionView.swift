@@ -25,6 +25,7 @@ class CollectionViewController: UIViewController {
     var isLoading = false
     var nextPage = ""
 
+    var testing = ""
     let charactersUrl: String = "https://rickandmortyapi.com/api/character"
     
     var favouritesStorage: MyFavouritesStorageProtocol = MyFavouritesStorage()
@@ -48,6 +49,8 @@ class CollectionViewController: UIViewController {
         collectionView.register(loadingReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "loadingresuableviewid")
         
         loadData()
+        
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,6 +109,7 @@ class CollectionViewController: UIViewController {
                 self.saveToStorage = self.favouritesStorage.loadFavourites()
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
+                    
                     self.isLoading = false
                 }
             }
@@ -171,6 +175,14 @@ extension CollectionViewController: UICollectionViewDelegate, UICollectionViewDa
                 }
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
+                    for character in self.characters {
+                        print(character.name.count)
+                        if character.name.count >= self.testing.count {
+                            self.testing = character.name
+                        }
+                    }
+                    
+                    print(self.testing)
                     self.isLoading = false
                 }
             }

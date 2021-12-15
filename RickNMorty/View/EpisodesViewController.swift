@@ -17,13 +17,20 @@ class EpisodesViewController: UIViewController {
 
     var isLoading = false
     let episodesUrl: String = "https://rickandmortyapi.com/api/episode"
+    var isShortInfo = false
+    var passedCharacter = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.dataSource = self
 
-        loadData()
+        if !isShortInfo {
+            loadData()
+            self.navigationItem.title = "All episodes"
+        } else {
+            self.navigationItem.title = "All episodes with \(passedCharacter)"
+        }
         
     }
     

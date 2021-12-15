@@ -20,5 +20,14 @@ struct Episodes {
         date = episodesData.results[index].airDate
     }
     
-    init?(){}
+    init?(episodesData: EpisodesResult) {
+        name = episodesData.name
+        episodeCode = episodesData.episode
+        characters = episodesData.characters
+        date = episodesData.airDate
+    }
+    
+    init(){
+        
+    }
 }

@@ -34,10 +34,15 @@ struct Characters: CharacterProtocol {
         episodes = charactersData.results[index].episode
     }
     
-    init?(charactersDataShort: CharactersDataShort) {
+    init?(charactersDataShort: PartsResult) {
         name = charactersDataShort.name
         image = charactersDataShort.image
         id = charactersDataShort.id
+        status = charactersDataShort.status.rawValue
+        species = charactersDataShort.species
+        gender = charactersDataShort.gender
+        location = charactersDataShort.location.name
+        episodes = charactersDataShort.episode
     }
     
     init?(name1: String, image1: String, id1: String) {

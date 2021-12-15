@@ -205,10 +205,26 @@ extension CollectionViewEpisodeCharacters: UICollectionViewDelegate, UICollectio
         }
     }
     
-//    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        collectionViewEpisode.deselectItem(at: indexPath, animated: true)
-//
-//        print("My name is \(characters[indexPath.row].name), i am on \(indexPath.row)")
-//    }
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.performSegue(withIdentifier: "fromEpisodeDetailToCharacterDetail", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "fromEpisodeDetailToCharacterDetail":
+            prepareCharactersInfo(segue)
+        default:
+            break
+        }
+    }
+    
+    private func prepareCharactersInfo(_ segue: UIStoryboardSegue) {
+        if let destinationController = segue.destination as? CharacterInfoViewController,
+           let indexPath = collectionViewEpisode.indexPathsForSelectedItems {
+            destinationController.character = characters[indexPath[0].row]
+            print(characters[indexPath[0].row])
+            print("prepareCharactersInfo data passed")
+        }
+    }
 
 }
