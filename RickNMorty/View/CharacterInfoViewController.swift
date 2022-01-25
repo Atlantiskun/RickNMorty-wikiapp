@@ -6,7 +6,8 @@
 //
 
 import UIKit
-import Nuke
+import CoreData
+import Network
 
 class CharacterInfoViewController: UIViewController {
 
@@ -20,40 +21,77 @@ class CharacterInfoViewController: UIViewController {
     @IBOutlet var episodesCountLabel: UILabel!
     @IBOutlet var episodesWithCharacterButton: UIButton!
     
-    var character = Characters()
+    var character: CharacterItem?
     var networkManager = NetworkManager()
     var episodes: [Episodes] = []
     var isLoading = false
     let episodesUrl: String = "https://rickandmortyapi.com/api/episode"
+    let characterUrl: String = "https://rickandmortyapi.com/api/character/"
+    
+    static var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "RIckNMorty")
+        container.loadPersistentStores { _, error in
+            if let error = error {
+                print(error)
+            }
+        }
+        return container
+    }()
+    
+    var context: NSManagedObjectContext {
+        CharacterInfoViewController.persistentContainer.viewContext
+    }
+    
+    private var coredataEpisodes: [EpisodeItem] = []
+    
+    let monitor = NWPathMonitor()
+    let queue = DispatchQueue(label: "InternetConnectionMonitor")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var options = ImageLoadingOptions()
-        options.placeholder = UIImage(named: "placeholder")
-        options.transition = .fadeIn(duration: 0.33)
-        Nuke.loadImage(with: URL(string: character!.image), options: options, into: characterImage)
+        guard let passedCharacter = character else {
+            return
+        }
+        nameLabel.text = passedCharacter.name
+        episodesWithCharacterButton.setTitle("Episodes with \(passedCharacter.name)", for: .normal)
+        statusLabel.text = passedCharacter.status
+        speciesLabel.text = passedCharacter.species
+        genderLabel.text = passedCharacter.gender
+        locationLabel.text = passedCharacter.location
+        episodesCountLabel.text = String(passedCharacter.episodes.count)
+        characterImage.image = UIImage(data: passedCharacter.image)
         
-        nameLabel.text = character?.name
-        episodesWithCharacterButton.setTitle("Episodes with \(character!.name)", for: .normal)
-        statusLabel.text = character?.status
-        speciesLabel.text = character?.species
-        genderLabel.text = character?.gender
-        locationLabel.text = character?.location
-        episodesCountLabel.text = String(character!.episodes.count)
-        
-        loadData()
+        monitor.pathUpdateHandler = { [self] pathUpdateHandler in
+            
+            getAllItems()
+            if coredataEpisodes.isEmpty && pathUpdateHandler.status == .satisfied {
+                loadData()
+            } else if !coredataEpisodes.isEmpty || pathUpdateHandler.status == .satisfied {
+                for item in coredataEpisodes {
+                    let proxyEpisode = (Episodes(episodesItem: item))
+                    if passedCharacter.episodes.contains("\(self.episodesUrl)/\(proxyEpisode.id)") {
+                        self.episodes.append(proxyEpisode)
+                    }
+                }
+            }
+        }
+
+        monitor.start(queue: queue)
     }
     func loadData() {
         if !self.isLoading {
             self.isLoading = true
             DispatchQueue.global().async {
                 self.networkManager.getNumberOfPagesAndCountFrom(url: self.episodesUrl) { info in
-                    for page in 1...info!.1 {
-                        self.networkManager.getEpisodesFrom(page: page) { episodesList in
-                            for episode in episodesList {
-                                if episode.characters.contains("https://rickandmortyapi.com/api/character/\(self.character!.id)"){
-                                    self.episodes.append(episode)
+                    if let charactersInfo = info {
+                        for page in 1...charactersInfo.1 {
+                            self.networkManager.getEpisodesFrom(page: page) { episodesList in
+                                for episode in episodesList {
+                                    if let passedCharacter = self.character,
+                                       episode.characters.contains("\(self.characterUrl)\(passedCharacter.id)") {
+                                        self.episodes.append(episode)
+                                    }
                                 }
                             }
                         }
@@ -83,6 +121,20 @@ class CharacterInfoViewController: UIViewController {
         destinationController.episodes.removeAll()
         destinationController.episodes = self.episodes
         destinationController.isShortInfo = true
-        destinationController.passedCharacter = character!.name
+        if let passedCharacter = character {
+            destinationController.passedCharacter = passedCharacter.name
+        }
+        
+    }
+}
+
+// MARK: - Core Data Func
+extension CharacterInfoViewController {
+    func getAllItems() {
+        do {
+            coredataEpisodes = try context.fetch(EpisodeItem.fetchRequest())
+        } catch {
+            // Error
+        }
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20G165" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CharacterItem" representedClassName=".CharacterItem" syncable="YES">
+        <attribute name="episodes" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="gender" attributeType="String"/>
+        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="imageUrl" optional="YES" attributeType="URI"/>
+        <attribute name="location" attributeType="String"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="species" attributeType="String"/>
+        <attribute name="status" attributeType="String"/>
+    </entity>
+    <entity name="EpisodeItem" representedClassName=".EpisodeItem" syncable="YES">
+        <attribute name="charactersURL" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="code" optional="YES" attributeType="String"/>
+        <attribute name="date" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="CharacterItem" positionX="-63" positionY="-18" width="128" height="164"/>
+        <element name="EpisodeItem" positionX="146.1375732421875" positionY="0.60821533203125" width="128" height="104"/>
+    </elements>
+</model>

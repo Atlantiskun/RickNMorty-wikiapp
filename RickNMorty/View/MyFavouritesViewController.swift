@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import CoreData
 import Nuke
 import Network
 
 class MyFavouritesViewController: UIViewController {
     @IBOutlet var collectionViewFavourites: UICollectionView!
+    var emptyFooterView: EmptyFooterReusableView?
     
     let networkManager = NetworkManager()
     var charactersOnEpisodeUrls: [String] = []
@@ -30,6 +32,25 @@ class MyFavouritesViewController: UIViewController {
         }
     }
     
+    static var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "RIckNMorty")
+        container.loadPersistentStores { _, error in
+            if let error = error {
+                print(error)
+            }
+        }
+        return container
+    }()
+    
+    var context: NSManagedObjectContext {
+        MyFavouritesViewController.persistentContainer.viewContext
+    }
+    
+    private var models: [CharacterItem] = []
+    let monitor = NWPathMonitor()
+    let queue = DispatchQueue(label: "InternetConnectionMonitor")
+    var internetIsAvailable = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.collectionViewFavourites.delegate = self
@@ -45,6 +66,15 @@ class MyFavouritesViewController: UIViewController {
         let loadingReusableNib = UINib(nibName: "LoadingReusableView", bundle: nil)
         collectionViewFavourites.register(loadingReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "loadingresuableviewid")
         
+        let emptyFooterReusableNib = UINib(nibName: "EmptyFooterReusableView", bundle: nil)
+        collectionViewFavourites.register(emptyFooterReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "emptyfooter")
+        
+        monitor.pathUpdateHandler = { [self] pathUpdateHandler in
+            if pathUpdateHandler.status == .satisfied {
+                internetIsAvailable = true
+            }
+        }
+        monitor.start(queue: queue)
         loadData()
     }
     
@@ -54,10 +84,14 @@ class MyFavouritesViewController: UIViewController {
         self.saveToStorage = self.favouritesStorage.loadFavourites()
         collectionViewFavourites.reloadData()
     }
+}
 
+// MARK: - Load Data func
+extension MyFavouritesViewController {
     func loadData() {
         collectionViewFavourites.collectionViewLayout.invalidateLayout()
         if !self.isLoading {
+            getAllItems()
             self.isLoading = true
             DispatchQueue.global().async {
                 self.characters = self.favouritesStorage.loadFavourites()
@@ -71,11 +105,45 @@ class MyFavouritesViewController: UIViewController {
         }
     }
     
+    func loadMoreData() {
+        if !self.isLoading {
+            self.isLoading = true
+            DispatchQueue.global().async {
+                if self.numberOfCharactersToShow + 20 > self.countOfAllCharacters {
+                    self.numberOfCharactersToShow += self.countOfAllCharacters - self.numberOfCharactersToShow
+                } else {
+                    self.numberOfCharactersToShow += 20
+                }
+                DispatchQueue.main.async {
+                    self.collectionViewFavourites.reloadData()
+                    self.isLoading = false
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Core Data Func
+extension MyFavouritesViewController {
+    func getAllItems() {
+        do {
+            models = try context.fetch(CharacterItem.fetchRequest())
+            DispatchQueue.main.async {
+                self.collectionViewFavourites.reloadData()
+            }
+        } catch {
+            // Error
+        }
+    }
+}
+
+// MARK: - Add to favourites
+extension MyFavouritesViewController {
     @objc func addToFavourites(_ sender: UIButton){
         if sender.currentBackgroundImage == UIImage(systemName: "heart") {
             saveToStorage.append(characters[sender.tag])
             sender.setBackgroundImage(UIImage(systemName: "heart.fill"), for: .normal)
-            notifyUser(title: nil, message: "Вы добавили персонажа \(characters[sender.tag].name) в избранное", timeToDissapear: 2)
+            notifyUser(title: nil, message: "You added \(characters[sender.tag].name) to favourites", timeToDissapear: 2)
         } else {
             for index in 0..<saveToStorage.count {
                 if saveToStorage[index].id == characters[sender.tag].id {
@@ -84,11 +152,11 @@ class MyFavouritesViewController: UIViewController {
                 }
             }
             sender.setBackgroundImage(UIImage(systemName: "heart"), for: .normal)
-            notifyUser(title: nil, message: "Вы удалили персонажа \(characters[sender.tag].name) из избранного", timeToDissapear: 2)
+            notifyUser(title: nil, message: "You removed \(characters[sender.tag].name) from favourites", timeToDissapear: 2)
         }
     }
     
-    func notifyUser(title: String?, message: String?, timeToDissapear: Int) -> Void {
+    func notifyUser(title: String?, message: String?, timeToDissapear: Int) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
@@ -100,21 +168,33 @@ class MyFavouritesViewController: UIViewController {
     }
 }
 
-extension MyFavouritesViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+// MARK: - CollectionView func
+extension MyFavouritesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         characters.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionviewitemcellid", for: indexPath) as! CollectionViewItemCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionviewitemcellid", for: indexPath) as? CollectionViewItemCell else {
+            return CollectionViewItemCell()
+        }
         var options = ImageLoadingOptions()
         options.placeholder = UIImage(named: "placeholder")
         options.transition = .fadeIn(duration: 0.33)
         
         if characters.count > indexPath.row {
             let imageUrlString = characters[indexPath.row].image
-            Nuke.loadImage(with: URL(string: imageUrlString), options: options, into: cell.imageView)
+            if self.models.count >= self.characters.count {
+                for character in models {
+                    if let imageUrl = character.imageUrl?.absoluteString,
+                       imageUrl == imageUrlString {
+                        cell.imageView.image = UIImage(data: character.image)
+                    }
+                }
+            } else {
+                Nuke.loadImage(with: URL(string: imageUrlString), options: options, into: cell.imageView)
+            }
             
             cell.addToFavourites.setBackgroundImage(UIImage(systemName: "heart"), for: .normal)
             for index in 0..<saveToStorage.count {
@@ -138,28 +218,9 @@ extension MyFavouritesViewController: UICollectionViewDelegate, UICollectionView
             loadMoreData()
         }
     }
+}
 
-    func loadMoreData() {
-        if !self.isLoading {
-            self.isLoading = true
-            DispatchQueue.global().async {
-                // fake background loading task
-//                sleep(2)
-                if self.numberOfCharactersToShow + 20 > self.countOfAllCharacters {
-                    self.numberOfCharactersToShow += self.countOfAllCharacters - self.numberOfCharactersToShow
-                } else {
-                    self.numberOfCharactersToShow += 20
-                }
-                DispatchQueue.main.async {
-                    self.collectionViewFavourites.reloadData()
-                    self.isLoading = false
-                }
-            }
-        }
-    }
-
-    
-    
+extension MyFavouritesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         if self.isLoading {
             return CGSize.zero
@@ -170,14 +231,33 @@ extension MyFavouritesViewController: UICollectionViewDelegate, UICollectionView
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionFooter {
-            let aFooterView = collectionViewFavourites.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "loadingresuableviewid", for: indexPath) as! LoadingReusableView
-            loadingView = aFooterView
-            loadingView?.backgroundColor = UIColor.clear
-            if self.numberOfCharactersToShow == self.countOfAllCharacters {
-                aFooterView.frame.size.height = 0
-                aFooterView.frame.size.width = 0
+            if self.saveToStorage.isEmpty {
+                guard let aFooterView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "emptyfooter", for: indexPath) as? EmptyFooterReusableView else {
+                    return EmptyFooterReusableView()
+                }
+                
+                aFooterView.labelOnFooter.text = "Favourite is empty. Tag anyone character to save it!"
+                
+                emptyFooterView = aFooterView
+                emptyFooterView?.backgroundColor = UIColor.white
+                
+                aFooterView.frame.size.height = self.collectionViewFavourites.frame.height - 60
+                aFooterView.frame.size.width = self.collectionViewFavourites.frame.width
+                
+                return aFooterView
+            } else {
+                guard let aFooterView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "loadingresuableviewid", for: indexPath) as? LoadingReusableView else {
+                    return LoadingReusableView()
+                }
+                
+                loadingView = aFooterView
+                loadingView?.backgroundColor = UIColor.clear
+                if self.numberOfCharactersToShow == self.countOfAllCharacters {
+                    aFooterView.frame.size.height = 0
+                    aFooterView.frame.size.width = 0
+                }
+                return aFooterView
             }
-            return aFooterView
         }
         return UICollectionReusableView()
     }
