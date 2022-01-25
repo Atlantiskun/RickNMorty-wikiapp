@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct EpisodesData: Decodable {
     let results: [EpisodesResult]
     let info: PagesInfo
@@ -18,9 +17,10 @@ struct EpisodesResult: Decodable {
     let episode: String
     let airDate: String
     let characters: [String]
+    let id: Int
     
     enum CodingKeys: String, CodingKey {
-        case name, episode, characters
+        case name, episode, characters, id
         case airDate = "air_date"
     }
 }

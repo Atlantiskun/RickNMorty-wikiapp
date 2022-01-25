@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct CharactersData: Decodable {
     let results: [CharacterResult]
     let info: PagesInfo
@@ -22,18 +21,18 @@ struct CharacterResult: Decodable {
     let id: Int
     let name: String
     let image: String
-    let status: tempAvgStatus
+    let status: TempAvgStatus
     let species: String
     let gender: String
-    let location: tempAvgLocation
+    let location: TempAvgLocation
     let episode: [String]
 }
 
-struct tempAvgLocation: Decodable {
+struct TempAvgLocation: Decodable {
     let name: String
 }
 
-enum tempAvgStatus: String, Decodable {
+enum TempAvgStatus: String, Decodable {
     case alive = "Alive"
     case dead = "Dead"
     case unknown = "unknown"
