@@ -7,7 +7,7 @@
 
 import UIKit
 import Nuke
-
+import Network
 
 class MyFavouritesViewController: UIViewController {
     @IBOutlet var collectionViewFavourites: UICollectionView!
@@ -37,12 +37,11 @@ class MyFavouritesViewController: UIViewController {
         
         self.countOfAllCharacters = charactersOnEpisodeUrls.count
         
-        
-        //Register Item Cell
+        // Register Item Cell
         let itemCellNib = UINib(nibName: "CollectionViewItemCell", bundle: nil)
         self.collectionViewFavourites.register(itemCellNib, forCellWithReuseIdentifier: "collectionviewitemcellid")
 
-        //Register Loading Reuseable View
+        // Register Loading Reuseable View
         let loadingReusableNib = UINib(nibName: "LoadingReusableView", bundle: nil)
         collectionViewFavourites.register(loadingReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "loadingresuableviewid")
         
@@ -55,7 +54,6 @@ class MyFavouritesViewController: UIViewController {
         self.saveToStorage = self.favouritesStorage.loadFavourites()
         collectionViewFavourites.reloadData()
     }
-    
 
     func loadData() {
         collectionViewFavourites.collectionViewLayout.invalidateLayout()
@@ -90,8 +88,6 @@ class MyFavouritesViewController: UIViewController {
         }
     }
     
-    
-    
     func notifyUser(title: String?, message: String?, timeToDissapear: Int) -> Void {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
@@ -107,7 +103,7 @@ class MyFavouritesViewController: UIViewController {
 extension MyFavouritesViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return characters.count
+        characters.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -197,12 +193,4 @@ extension MyFavouritesViewController: UICollectionViewDelegate, UICollectionView
             self.loadingView?.activityIndicator.stopAnimating()
         }
     }
-    
-//    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        collectionViewFavourites.deselectItem(at: indexPath, animated: true)
-//
-////        characters.remove(at: indexPath.row)
-//        collectionViewFavourites.reloadData()
-//    }
-
 }

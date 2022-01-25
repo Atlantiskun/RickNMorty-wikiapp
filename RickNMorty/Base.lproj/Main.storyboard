@@ -61,7 +61,7 @@
             <objects>
                 <viewController storyboardIdentifier="CharacterInfoViewController" id="7Ng-Su-8Lv" customClass="CharacterInfoViewController" customModule="RickNMorty" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="b4l-ue-pce">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Character's Name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PtA-Br-sVS">
@@ -199,7 +199,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UhB-ih-Bt8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6190" y="357"/>
+            <point key="canvasLocation" x="6184" y="357"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="oNo-20-VZG">
@@ -227,7 +227,7 @@
             <objects>
                 <viewController id="GKc-hx-plX" customClass="EpisodesViewController" customModule="RickNMorty" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2Pl-s3-bHf">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Fce-5B-p9V">
@@ -300,7 +300,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Ix-74-fad" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4039" y="357"/>
+            <point key="canvasLocation" x="4116" y="357"/>
         </scene>
         <!--Characters from Episode-->
         <scene sceneID="8aD-hf-dKF">
@@ -351,7 +351,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GNY-XD-s3T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5016" y="357"/>
+            <point key="canvasLocation" x="5084" y="357"/>
         </scene>
         <!--All episodes-->
         <scene sceneID="lgx-H8-rUp">
@@ -533,6 +533,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="7TR-u5-dYg"/>
         <segue reference="FBo-Pn-aoz"/>
         <segue reference="j2q-oV-GOf"/>
     </inferredMetricsTieBreakers>

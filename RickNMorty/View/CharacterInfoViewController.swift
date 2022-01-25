@@ -10,7 +10,6 @@ import Nuke
 
 class CharacterInfoViewController: UIViewController {
 
-    
     @IBOutlet var characterInfoViewController: UIView!
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var characterImage: UIImageView!
@@ -45,7 +44,6 @@ class CharacterInfoViewController: UIViewController {
         
         loadData()
     }
-    
     func loadData() {
         if !self.isLoading {
             self.isLoading = true
@@ -77,7 +75,6 @@ class CharacterInfoViewController: UIViewController {
             break
         }
     }
-    
     private func prepareEpisodesWithCharacter(_ segue: UIStoryboardSegue) {
         guard let destinationController = segue.destination as? EpisodesViewController else {
             return

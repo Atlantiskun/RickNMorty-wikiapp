@@ -38,11 +38,11 @@ class CollectionViewEpisodeCharacters: UIViewController {
         self.countOfAllCharacters = charactersOnEpisodeUrls.count
         
         
-        //Register Item Cell
+        // Register Item Cell
         let itemCellNib = UINib(nibName: "CollectionViewItemCell", bundle: nil)
         self.collectionViewEpisode.register(itemCellNib, forCellWithReuseIdentifier: "collectionviewitemcellid")
 
-        //Register Loading Reuseable View
+        // Register Loading Reuseable View
         let loadingReusableNib = UINib(nibName: "LoadingReusableView", bundle: nil)
         collectionViewEpisode.register(loadingReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "loadingresuableviewid")
         
@@ -67,6 +67,7 @@ class CollectionViewEpisodeCharacters: UIViewController {
                     }
                     self.saveToStorage = self.favouritesStorage.loadFavourites()
                 }
+                
                 if self.charactersOnEpisodeUrls.count < 20 {
                     self.numberOfCharactersToShow = self.charactersOnEpisodeUrls.count
                 } else {
@@ -113,7 +114,8 @@ class CollectionViewEpisodeCharacters: UIViewController {
 extension CollectionViewEpisodeCharacters: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return numberOfCharactersToShow    }
+        numberOfCharactersToShow
+    }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionviewitemcellid", for: indexPath) as! CollectionViewItemCell

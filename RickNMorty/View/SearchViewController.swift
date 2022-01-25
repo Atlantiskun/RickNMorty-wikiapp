@@ -9,9 +9,7 @@ import UIKit
 import Nuke
 
 class SearchViewController: UIViewController {
-
-    @IBOutlet var searchResults: UICollectionView!
-    
+    @IBOutlet private var searchResults: UICollectionView!
     let networkManager = NetworkManager()
     var isSearching = false
     var failureSearch = false
@@ -26,39 +24,32 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.searchResults.delegate = self
         self.searchResults.dataSource = self
-        
         definesPresentationContext = true
-        
         let itemCellNib = UINib(nibName: "CollectionViewItemCell", bundle: nil)
         self.searchResults.register(itemCellNib, forCellWithReuseIdentifier: "collectionviewitemcellid")
 
         let loadingReusableNib = UINib(nibName: "LoadingReusableView", bundle: nil)
         searchResults.register(loadingReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "loadingresuableviewid")
-        
         self.saveToStorage = self.favouritesStorage.loadFavourites()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         self.saveToStorage = self.favouritesStorage.loadFavourites()
         searchResults.reloadData()
     }
     
-    @objc func addToFavourites(_ sender: UIButton){
+    @objc func addToFavourites(_ sender: UIButton) {
         if sender.currentBackgroundImage == UIImage(systemName: "heart") {
             saveToStorage.append(filteredCharacters[sender.tag])
             sender.setBackgroundImage(UIImage(systemName: "heart.fill"), for: .normal)
             notifyUser(title: nil, message: "You added \(filteredCharacters[sender.tag].name) to favourites", timeToDissapear: 2)
         } else {
-            for index in 0..<saveToStorage.count {
-                if saveToStorage[index].id == filteredCharacters[sender.tag].id {
-                    saveToStorage.remove(at: index)
-                    break
-                }
+            for index in 0..<saveToStorage.count where saveToStorage[index].id == filteredCharacters[sender.tag].id {
+                saveToStorage.remove(at: index)
+                break
             }
             sender.setBackgroundImage(UIImage(systemName: "heart"), for: .normal)
             notifyUser(title: nil, message: "You removed \(filteredCharacters[sender.tag].name) from favourites", timeToDissapear: 2)
@@ -69,7 +60,6 @@ class SearchViewController: UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
-        
         self.present(alert, animated: true, completion: nil)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             alert.dismiss(animated: true, completion: nil)
@@ -79,7 +69,7 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.filteredCharacters.count
+        self.filteredCharacters.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -87,14 +77,12 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         var options = ImageLoadingOptions()
         options.placeholder = UIImage(named: "placeholder")
         options.transition = .fadeIn(duration: 0.33)
-        
         if filteredCharacters.count > indexPath.row {
             let imageUrlString = filteredCharacters[indexPath.row].image
             Nuke.loadImage(with: URL(string: imageUrlString), options: options, into: cell.imageView)
             
             cell.addToFavourites.setBackgroundImage(UIImage(systemName: "heart"), for: .normal)
-            for index in 0..<saveToStorage.count {
-                if saveToStorage[index].id == filteredCharacters[indexPath.row].id {
+            for index in 0..<saveToStorage.count where saveToStorage[index].id == filteredCharacters[indexPath.row].id {
                     cell.addToFavourites.setBackgroundImage(UIImage(systemName: "heart.fill"), for: .normal)
                 }
             }
@@ -103,20 +91,18 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         } else {
             cell.imageView.image = UIImage(named: "placeholder")
         }
-        
         cell.addToFavourites.tag = indexPath.row
-        
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let headerView:UICollectionReusableView =  collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CollectionViewHeader", for: indexPath)
+            let headerView:UICollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "CollectionViewHeader", for: indexPath)
             return headerView
         
         case UICollectionView.elementKindSectionFooter:
-            let footerView:UICollectionReusableView =  collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "CollectionViewFooter", for: indexPath)
+            let footerView:UICollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "CollectionViewFooter", for: indexPath)
             return footerView
             
         default:
@@ -165,7 +151,6 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         } else {
             resetTimer(searchText: searchText)
         }
-        
     }
 }
 

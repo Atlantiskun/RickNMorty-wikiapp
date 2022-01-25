@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct NetworkManager {
     
     func getNumberOfPagesAndCountFrom(url urlString: String, complitionHandler: @escaping ((Int, Int)?) -> Void) {
@@ -23,7 +22,7 @@ struct NetworkManager {
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data else {
                 print(String(describing: error))
                 return
@@ -63,7 +62,7 @@ struct NetworkManager {
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data else {
                 print(String(describing: error))
                 return
@@ -85,7 +84,7 @@ struct NetworkManager {
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data else {
                 print(String(describing: error))
                 return
@@ -119,7 +118,6 @@ struct NetworkManager {
         return nil
     }
     
-    
     func getCharacterFrom(urlString: String, complitionHandler: @escaping (Characters) -> Void) {
         guard let url = URL(string: urlString) else {
             return
@@ -128,7 +126,7 @@ struct NetworkManager {
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data else {
                 print(String(describing: error))
                 return
@@ -157,8 +155,6 @@ struct NetworkManager {
         return nil
     }
     
-    
-    
     func getEpisodesFrom(page: Int, complitionHandler: @escaping ([Episodes]) -> Void) {
         let urlString = "https://rickandmortyapi.com/api/episode?page=\(page)"
         guard let url = URL(string: urlString) else {
@@ -168,7 +164,7 @@ struct NetworkManager {
         var request = URLRequest(url: url, timeoutInterval: Double.infinity)
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
             guard let data = data else {
                 print(String(describing: error))
                 return

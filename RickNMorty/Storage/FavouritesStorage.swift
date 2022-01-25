@@ -7,18 +7,14 @@
 
 import Foundation
 
-
-
 protocol MyFavouritesStorageProtocol {
     func loadFavourites() -> [CharacterProtocol]
     func save(_ favouriets: [CharacterProtocol])
-    
 }
 
 class MyFavouritesStorage: MyFavouritesStorageProtocol {
     private var storage = UserDefaults.standard
     var storageKey: String = "ricknmortyfavourites"
-    
     
     func loadFavourites() -> [CharacterProtocol] {
         var resultCharacters: [CharacterProtocol] = []
@@ -30,7 +26,7 @@ class MyFavouritesStorage: MyFavouritesStorageProtocol {
                   let image = character["image"] else {
                 continue
             }
-            resultCharacters.append(Characters(name1: name, image1: image, id1: id)!)
+            resultCharacters.append(Characters(name1: name, image1: image, id1: id))
         }
         
         return resultCharacters
@@ -39,7 +35,7 @@ class MyFavouritesStorage: MyFavouritesStorageProtocol {
     func save(_ favouriets: [CharacterProtocol]) {
         var arrayFroStorage: [[String:String]] = []
         favouriets.forEach { character in
-            var newElementForStorage: Dictionary<String,String> = [:]
+            var newElementForStorage: [String:String] = [:]
             newElementForStorage["name"] = character.name
             newElementForStorage["image"] = character.image
             newElementForStorage["id"] = String(character.id)

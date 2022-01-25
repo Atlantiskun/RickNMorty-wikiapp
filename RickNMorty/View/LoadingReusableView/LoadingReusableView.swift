@@ -16,4 +16,3 @@ class LoadingReusableView: UICollectionReusableView {
         activityIndicator.color = UIColor.black
     }
 }
-

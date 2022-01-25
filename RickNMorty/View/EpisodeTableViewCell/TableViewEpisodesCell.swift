@@ -9,7 +9,6 @@ import UIKit
 
 class TableViewEpisodesCell: UITableViewCell {
 
-    
     @IBOutlet var episodeLabel: UILabel!
     @IBOutlet var episodeCodeLabel: UILabel!
     @IBOutlet var episodeDataLabel: UILabel!
