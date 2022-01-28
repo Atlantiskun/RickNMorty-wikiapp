@@ -128,12 +128,11 @@ class CollectionViewEpisodeCharacters: UIViewController {
     }
     
     func loadDataCoreData() {
-        
         for onEpisodeIndex in 0..<charactersOnEpisodeUrls.count {
             for index in 0..<models.count {
                 if charactersOnEpisodeUrls[onEpisodeIndex] == "https://rickandmortyapi.com/api/character/\(models[index].id)" {
                     characters.append(Characters(charactersItem: models[index]))
-                    if charactersOnPage?.append(models[index]) == nil {
+                    if charactersOnPage == nil {
                         charactersOnPage = [models[index]]
                     } else {
                         charactersOnPage?.append(models[index])
@@ -143,7 +142,7 @@ class CollectionViewEpisodeCharacters: UIViewController {
                     charactersNeedToDownload.append(charactersOnEpisodeUrls[onEpisodeIndex])
                     if internetIsAvailable {
                         networkManager.getCharacterFrom(urlString: charactersOnEpisodeUrls[onEpisodeIndex]) { [self] characterFromURL in
-                            if charactersOnPage?.append(createItem(from: characterFromURL)) == nil {
+                            if charactersOnPage == nil {
                                 charactersOnPage = [createItem(from: characterFromURL)]
                             } else {
                                 charactersOnPage?.append(createItem(from: characterFromURL))
