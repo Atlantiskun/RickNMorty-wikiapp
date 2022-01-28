@@ -4,7 +4,6 @@
 //
 //  Created by Дмитрий Болучевских on 08.12.2021.
 //
-
 import UIKit
 import CoreData
 import Nuke
@@ -185,7 +184,14 @@ extension MyFavouritesViewController: UICollectionViewDelegate, UICollectionView
         
         if characters.count > indexPath.row {
             let imageUrlString = characters[indexPath.row].image
-            if self.models.count >= self.characters.count {
+            var maxId = 0
+            for character in characters {
+                if character.id > maxId {
+                    maxId = character.id
+                }
+            }
+
+            if self.models.count >= maxId {
                 for character in models {
                     if let imageUrl = character.imageUrl?.absoluteString,
                        imageUrl == imageUrlString {
