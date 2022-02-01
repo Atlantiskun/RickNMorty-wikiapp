@@ -10,6 +10,7 @@ protocol CharacterProtocol {
     var name: String { get set }
     var image: String { get set }
     var id: Int { get set }
+    
 }
 
 struct Characters: CharacterProtocol {
@@ -57,14 +58,13 @@ struct Characters: CharacterProtocol {
         episodes = charactersItem.episodes
     }
     
-    init(name1: String, image1: String, id1: String) {
-        name = name1
-        image = image1
-        id = Int(id1) ?? 0
+    init(name: String, image: String, id: String) {
+        self.name = name
+        self.image = image
+        self.id = Int(id) ?? 0
     }
     
     init(){
-        
     }
 }
 
@@ -80,15 +80,6 @@ extension Characters {
            self.episodes == characterItem.episodes {
             return true
         } else {
-            print("""
-                    names: \(self.name) | \(characterItem.name)
-                    id: \(self.id) | \(characterItem.id)
-                    status: \(self.status) | \(characterItem.status)
-                    species: \(self.species) | \(characterItem.species)
-                    gender: \(self.gender) | \(characterItem.gender)
-                    location: \(self.location) | \(characterItem.location)
-                    episodes: \(self.episodes.count) | \(characterItem.episodes.count)
-            """)
             return false
         }
         

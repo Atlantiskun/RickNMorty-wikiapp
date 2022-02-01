@@ -12,24 +12,21 @@ import Network
 class MyFavouritesViewController: UIViewController {
     @IBOutlet var collectionViewFavourites: UICollectionView!
     var emptyFooterView: EmptyFooterReusableView?
-    
-    let networkManager = NetworkManager()
-    var charactersOnEpisodeUrls: [String] = []
-    
-    var characters: [CharacterProtocol] = []
-    
-    var countOfAllCharacters = 0
-    var numberOfCharactersToShow = 0
     var loadingView: LoadingReusableView?
-
-    var isLoading = false
     
+    var charactersOnEpisodeUrls: [String] = []
+    var characters: [CharacterProtocol] = []
     var favouritesStorage: MyFavouritesStorageProtocol = MyFavouritesStorage()
     var saveToStorage: [CharacterProtocol] = [] {
         didSet {
             favouritesStorage.save(saveToStorage)
         }
     }
+    private var models: [CharacterItem] = []
+    
+    var countOfAllCharacters = 0
+    var numberOfCharactersToShow = 0
+    var isLoading = false
     
     static var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "RIckNMorty")
@@ -44,11 +41,6 @@ class MyFavouritesViewController: UIViewController {
     var context: NSManagedObjectContext {
         MyFavouritesViewController.persistentContainer.viewContext
     }
-    
-    private var models: [CharacterItem] = []
-    let monitor = NWPathMonitor()
-    let queue = DispatchQueue(label: "InternetConnectionMonitor")
-    var internetIsAvailable = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,15 +57,10 @@ class MyFavouritesViewController: UIViewController {
         let loadingReusableNib = UINib(nibName: "LoadingReusableView", bundle: nil)
         collectionViewFavourites.register(loadingReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "loadingresuableviewid")
         
+        // Register Empty Footer
         let emptyFooterReusableNib = UINib(nibName: "EmptyFooterReusableView", bundle: nil)
         collectionViewFavourites.register(emptyFooterReusableNib, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "emptyfooter")
         
-        monitor.pathUpdateHandler = { [self] pathUpdateHandler in
-            if pathUpdateHandler.status == .satisfied {
-                internetIsAvailable = true
-            }
-        }
-        monitor.start(queue: queue)
         loadData()
     }
     
@@ -220,7 +207,7 @@ extension MyFavouritesViewController: UICollectionViewDelegate, UICollectionView
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == numberOfCharactersToShow - 10  && !self.isLoading {
+        if indexPath.row == numberOfCharactersToShow - 10  && !self.isLoading && numberOfCharactersToShow != countOfAllCharacters{
             loadMoreData()
         }
     }

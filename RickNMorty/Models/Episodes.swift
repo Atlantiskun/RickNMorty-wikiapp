@@ -22,14 +22,6 @@ struct Episodes {
         id = episodesData.results[index].id
     }
     
-    init?(episodesData: EpisodesResult) {
-        name = episodesData.name
-        episodeCode = episodesData.episode
-        characters = episodesData.characters
-        date = episodesData.airDate
-        id = episodesData.id
-    }
-    
     init(episodesItem: EpisodeItem) {
         name = episodesItem.name
         episodeCode = episodesItem.code
@@ -39,7 +31,6 @@ struct Episodes {
     }
     
     init(){
-        
     }
 }
 
@@ -52,13 +43,6 @@ extension Episodes {
            self.id == Int(episodeItem.id) {
             return true
         } else {
-            print("""
-                    names: \(self.name) | \(episodeItem.name)
-                    code: \(self.episodeCode) | \(episodeItem.code)
-                    count: \(self.characters.count) | \(episodeItem.charactersURL.count)
-                    date: \(self.date) | \(episodeItem.date)
-                    id: \(self.id) | \(episodeItem.id)
-            """)
             return false
         }
     }

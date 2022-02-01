@@ -26,7 +26,7 @@ class MyFavouritesStorage: MyFavouritesStorageProtocol {
                   let image = character["image"] else {
                 continue
             }
-            resultCharacters.append(Characters(name1: name, image1: image, id1: id))
+            resultCharacters.append(Characters(name: name, image: image, id: id))
         }
         
         return resultCharacters
