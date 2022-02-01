@@ -227,7 +227,7 @@
             <objects>
                 <viewController id="GKc-hx-plX" customClass="EpisodesViewController" customModule="RickNMorty" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2Pl-s3-bHf">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Fce-5B-p9V">
@@ -307,7 +307,7 @@
             <objects>
                 <viewController id="kC5-wh-hY8" userLabel="Characters from Episode" customClass="CollectionViewEpisodeCharacters" customModule="RickNMorty" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YKR-Fd-Xia">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ZaO-XO-1ax">
@@ -351,7 +351,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GNY-XD-s3T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5084" y="357"/>
+            <point key="canvasLocation" x="5152" y="357"/>
         </scene>
         <!--All episodes-->
         <scene sceneID="lgx-H8-rUp">
@@ -533,7 +533,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="7TR-u5-dYg"/>
         <segue reference="FBo-Pn-aoz"/>
         <segue reference="j2q-oV-GOf"/>
     </inferredMetricsTieBreakers>
